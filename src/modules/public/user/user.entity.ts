@@ -1,10 +1,5 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { PasswordTransformer } from "./password.transformer";
 
 @Entity()
 export class User {
@@ -12,15 +7,24 @@ export class User {
   @PrimaryGeneratedColumn()
   user_id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()
   email?: string;
 
-  @Column()
+  @Column({
+    transformer: new PasswordTransformer(),
+  })
   password?: string;
 
   @Column()
-  role: string;
+  role: string = "USER_ACCESS";
+}
+
+export class UserFillableFields {
+  email: string;
+  username: string;
+  password: string;
+  role: string = "USER_ACCESS";
 }

@@ -1,8 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotAcceptableException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "./user.entity";
+import { User, UserFillableFields } from "./user.entity";
 import { Repository } from "typeorm";
-import { error, info } from "console";
+import { debug, error, info, log } from "console";
+import { AddUserPayload } from "./add-user.payload";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class UserService {
@@ -40,7 +42,6 @@ export class UserService {
       return await this.userRepository
         .createQueryBuilder("users")
         .addSelect("users.email")
-        .addSelect("users.password")
         .where("users.email = :email")
         .setParameter("email", email)
         .getOne();
@@ -51,6 +52,70 @@ export class UserService {
         "getByEmail()"
       );
     }
+  }
+
+  async getByUserName(username: string) {
+    info(
+      "Getting user information by user by usename :" + username,
+      __filename,
+      "getByUserName()"
+    );
+    try {
+      return await this.userRepository
+        .createQueryBuilder("users")
+        .addSelect("users.username")
+        .where("users.username = :username")
+        .setParameter("username", username)
+        .getOne();
+    } catch (er) {
+      error(
+        "Getting error in find user by  username " + username,
+        __filename,
+        "getByUserName()"
+      );
+    }
+  }
+
+  async addUser(payload: UserFillableFields) {
+    debug(
+      "Adding a new biolabs user" + payload.username,
+      __filename,
+      "addUser()"
+    );
+    let savedUser: any = null;
+    try {
+      const user = await this.getByUserName(payload.username);
+      if (user) {
+        debug(
+          "User with provided username already created",
+          __filename,
+          "addUser()"
+        );
+        return new NotAcceptableException(
+          "User with provided username already created."
+        );
+      }
+      log(payload);
+      if (["USER_ACCESS", "BUSINESS_OWNER_ACCESS"].includes(payload.role)) {
+        const newUser = this.userRepository.create(payload);
+        savedUser = await this.userRepository.save(newUser);
+
+        info("User added successfully", __filename, "addUser(");
+      } else if (payload.role == "ADMIN_ACCESS") {
+        return new NotAcceptableException(
+          "Contact Authorities for Admins Right."
+        );
+      } else {
+        return new NotAcceptableException("Please Selecet Right Role");
+      }
+    } catch (err) {
+      error(
+        "Getting error to create the new user " + err.message,
+        __filename,
+        "addUser()"
+      );
+    }
+    return savedUser;
   }
 
   async updateUser(

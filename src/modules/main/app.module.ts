@@ -5,7 +5,9 @@ import { AuthModule } from "../public/auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
 
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "../public/user/user.entity";
+import { RestaurantModule } from "../public/restaurant/restaurant.module";
+import { BookingModule } from "../public/booking/booking.module";
+import { ReviewModule } from "../public/review/review.module";
 @Module({
   imports: [
     AuthModule,
@@ -21,6 +23,9 @@ import { User } from "../public/user/user.entity";
       synchronize: true,
       autoLoadEntities: true,
     }),
+    RestaurantModule,
+    BookingModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
