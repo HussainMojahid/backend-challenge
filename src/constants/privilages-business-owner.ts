@@ -4,9 +4,17 @@ export const BUSINESS_OWNER_ACCESS_LEVELS = {
   name: "BUSINESS OWNER",
   action: true,
   permissions: {
-    create: true,
-    read: true,
-    update: true,
-    delete: false,
+    listingAccessGrid: {
+      create: true,
+      read: true,
+      update: true,
+      delete: false,
+    },
+    reviewAccessGrid: {
+      create: false,
+      read: true,
+      update: true,
+      delete: false,
+    },
   },
 };

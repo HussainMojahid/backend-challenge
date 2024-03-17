@@ -12,6 +12,7 @@ import {
 import { UserReviewService } from "./review.service";
 import { CreateUserReviewDto } from "./create-review.dto";
 import { JwtAuthGuard } from "../auth/jwt-guard";
+import { log } from "console";
 
 @Controller("user-reviews")
 export class UserReviewController {

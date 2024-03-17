@@ -4,9 +4,17 @@ export const ADMIN_ACCESS_LEVELS = {
   name: "ADMIN",
   action: true,
   permissions: {
-    create: true,
-    read: true,
-    update: true,
-    delete: true,
+    listingAccessGrid: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+    reviewAccessGrid: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
   },
 };

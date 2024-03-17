@@ -118,6 +118,34 @@ export class UserService {
     return savedUser;
   }
 
+  async createAdminUser(): Promise<void> {
+    const adminExists = await this.adminExists();
+    if (!adminExists) {
+      let user = {
+        username: "admin",
+        password: "adminPassword",
+        email: "admin@mail.com",
+        role: "ADMIN_ACCESS",
+      };
+      const newUser = this.userRepository.create(user);
+      await this.userRepository.save(newUser);
+    }
+  }
+
+  async findAdmin(): Promise<User | undefined> {
+    return this.userRepository
+      .createQueryBuilder("users")
+      .addSelect("users.role")
+      .where("users.role = :role")
+      .setParameter("role", "ADMIN_ACCESS")
+      .getOne();
+  }
+
+  async adminExists(): Promise<boolean> {
+    const admin = await this.findAdmin();
+    return !!admin;
+  }
+
   async updateUser(
     userId: number,
     updatedUserData: Partial<User>

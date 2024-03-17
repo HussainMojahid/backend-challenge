@@ -30,7 +30,10 @@ export class RestaurantService {
       return new BadRequestException("User Not Found");
     }
     const newRestaurant = this.restaurantRepository.create(restaurantData);
-    return await this.restaurantRepository.save(newRestaurant);
+    let res = await this.restaurantRepository.save(newRestaurant);
+    4;
+    delete res.user;
+    return res;
   }
 
   async getAllRestaurants(): Promise<Restaurant[]> {
@@ -50,9 +53,11 @@ export class RestaurantService {
     updatedRestaurantData: Partial<Restaurant>
   ): Promise<Restaurant | undefined> {
     await this.restaurantRepository.update(restaurantId, updatedRestaurantData);
-    return await this.restaurantRepository.findOneBy({
+    let res = await this.restaurantRepository.findOneBy({
       restaurant_id: restaurantId,
     });
+    delete res.user;
+    return res;
   }
 
   async deleteRestaurant(

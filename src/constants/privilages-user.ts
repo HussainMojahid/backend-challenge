@@ -4,9 +4,17 @@ export const USER_ACCESS_LEVELS = {
   name: "USER",
   action: false,
   permissions: {
-    create: false,
-    read: true,
-    update: false,
-    delete: false,
+    listingAccessGrid: {
+      create: false,
+      read: true,
+      update: false,
+      delete: false,
+    },
+    reviewAccessGrid: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
   },
 };

@@ -7,7 +7,10 @@ export class Restaurant {
   @PrimaryGeneratedColumn()
   restaurant_id: number;
 
-  @ManyToOne(() => User, (user) => user.restaurants)
+  @ManyToOne(() => User, (user) => user.restaurants, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   user: User;
 
   @Column()

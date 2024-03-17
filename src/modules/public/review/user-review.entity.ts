@@ -17,21 +17,26 @@ export class UserReview {
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.userReviews)
   restaurant: Restaurant;
 
-  @ManyToOne(() => User, (user) => user.reviews)
+  @ManyToOne(() => User, (user) => user.reviews, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   user: User;
 
   @Column("text")
   review_text: string;
 
-  @Column()
+  @Column({ nullable: true })
   rating: number;
 
-  @OneToMany(() => UserReview, (review) => review.parentReview, {
-    nullable: true,
-  })
+  @OneToMany(() => UserReview, (review) => review.parentReview)
   @JoinColumn({ name: "parent_review_id" })
   replies: UserReview[];
 
-  @ManyToOne(() => UserReview, (review) => review.replies, { nullable: true })
+  @ManyToOne(() => UserReview, (review) => review.replies, {
+    nullable: true,
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   parentReview: UserReview;
 }

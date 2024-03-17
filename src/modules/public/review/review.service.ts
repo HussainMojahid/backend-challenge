@@ -29,7 +29,9 @@ export class UserReviewService {
 
   async findByRestaurant(restaurantId: number): Promise<UserReview[]> {
     return this.userReviewRepository.find({
-      where: { restaurant: { restaurant_id: restaurantId } },
+      where: {
+        restaurant: { restaurant_id: restaurantId },
+      },
     });
   }
 

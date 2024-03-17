@@ -17,7 +17,7 @@ export class RestaurantController {
   constructor(private resService: RestaurantService) {}
 
   @Post()
-  @UseGuards(new JwtAuthGuard(["BUSINESS_OWNER_ACCESS"]))
+  @UseGuards(new JwtAuthGuard(["BUSINESS_OWNER_ACCESS", "ADMIN_ACCESS"]))
   async addResturant(@Body() restaurant: Restaurant) {
     console.log(restaurant);
     return this.resService.createRestaurant(restaurant);
@@ -32,7 +32,9 @@ export class RestaurantController {
   }
 
   @Get("/:id")
-  @UseGuards(new JwtAuthGuard(["ADMIN_ACCESS"]))
+  @UseGuards(
+    new JwtAuthGuard(["BUSINESS_OWNER_ACCESS", "ADMIN_ACCESS", "USER_ACCESS"])
+  )
   async getResturantbyId(@Param("id") id: number) {
     return this.resService.getRestaurantById(id);
   }
